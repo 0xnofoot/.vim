@@ -217,6 +217,9 @@ call plug#end()
 " === Dress up my vim
 " ===
 color monokai
+let g:airline_theme='zenburn'
+map <LEADER>c1 :colorscheme monokai<CR>:AirlineTheme zenburn<CR>
+map <LEADER>c2 :colorscheme monokai<CR>:AirlineTheme molokai<CR>
 
 " ===
 " === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
