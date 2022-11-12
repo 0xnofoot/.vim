@@ -160,9 +160,7 @@ map <LEADER>fd /\(\<\w\+\>\)\_s*\1
 call plug#begin('~/.vim/plugged')
 
 " Pretty Dress
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'bling/vim-bufferline'
+Plug 'crusoexia/vim-monokai'
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -211,6 +209,11 @@ Plug 'kana/vim-textobj-user'
 Plug 'fadein/vim-FIGlet'
 
 call plug#end()
+
+" ===
+" === Dress up my vim
+" ===
+color monokai
 
 " ===
 " === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
