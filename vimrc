@@ -161,6 +161,9 @@ call plug#begin('~/.vim/plugged')
 
 " Pretty Dress
 Plug 'crusoexia/vim-monokai'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'bling/vim-bufferline'
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
