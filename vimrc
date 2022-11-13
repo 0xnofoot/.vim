@@ -1,3 +1,11 @@
+" 
+"        _                       __                           __             _   
+" __   _(_)_ __ ___  _ __ ___   / _| ___  _ __   _ __   ___  / _| ___   ___ | |_ 
+" \ \ / / | '_ ` _ \| '__/ __| | |_ / _ \| '__| | '_ \ / _ \| |_ / _ \ / _ \| __|
+"  \ V /| | | | | | | | | (__  |  _| (_) | |    | | | | (_) |  _| (_) | (_) | |_ 
+"   \_/ |_|_| |_| |_|_|  \___| |_|  \___/|_|    |_| |_|\___/|_|  \___/ \___/ \__|
+"                                                                                
+
 " ===
 " === Auto load for first time uses
 " ===
@@ -61,10 +69,30 @@ set backspace=indent,eol,start
 set foldmethod=indent
 set foldlevel=99
 
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" Set cursor shape and color
 
+" not work for st terminal
+" let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+" let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+" let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+" 1 -> blinking block  
+" 2 -> solid block  
+" 3 -> blinking underscore  
+" 4 -> solid underscore  
+" 5 -> blinking vertical bar  
+" 6 -> solid vertical bar  
+" you can change cursor color by add color_name after "12;" like this:
+"                                       let &t_SI = "\<Esc>[6 q" . "\<Esc>]12;pink\x7"
+"       but these is something wrong in st terminal, it will effect st color
+if &term =~ "st-256color"
+    " INSERT mode
+    let &t_SI = "\<Esc>[6 q" . "\<Esc>]12;\x7"
+    " REPLACE mode
+    let &t_SR = "\<Esc>[3 q" . "\<Esc>]12;\x7"
+    " NORMAL mode
+    let &t_EI = "\<Esc>[2 q" . "\<Esc>]12;\x7"
+endif
 
 " ===
 " === Restore Cursor Position
@@ -108,6 +136,9 @@ let mapleader=" "
 " J/K keys for 5 times j/k (faster navigation)
 noremap J 5j
 noremap K 5k
+noremap W 5w
+noremap E 3e
+noremap B 3b
 
 " Search
 noremap = nzz
@@ -149,7 +180,7 @@ map tL :+tabmove<CR>
 " ===
 
 " Press space twice to jump to the next '<++>' and edit it
-map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
+" map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " Call figlet
 map tx :r !figlet
@@ -163,7 +194,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'crusoexia/vim-monokai'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'bling/vim-bufferline'
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -183,12 +213,10 @@ Plug 'mbbill/undotree/'
 " Other visual enhancement
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'itchyny/vim-cursorword'
-Plug 'tmhedberg/SimpylFold'
 
 " Git
 Plug 'rhysd/conflict-marker.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 
 " Bookmarks
 Plug 'kshenoy/vim-signature'
@@ -200,15 +228,10 @@ Plug 'ron89/thesaurus_query.vim'
 " Other useful utilities
 Plug 'jiangmiao/auto-pairs'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'ntpeters/vim-better-whitespace', { 'on': ['EnableWhitespace', 'ToggleWhitespace'] } "displays trailing whitespace (after :EnableWhitespace, vim slows down)
-Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+Plug 'tpope/vim-surround' 
 Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
-Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
-Plug 'scrooloose/nerdcommenter' " in <space>cc to comment a line
 
 " Dependencies
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'kana/vim-textobj-user'
 Plug 'fadein/vim-FIGlet'
 
 call plug#end()
@@ -275,7 +298,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>f  <Plug>(coc-normat-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
@@ -296,16 +319,6 @@ function! s:cocActionsOpenFromSelected(type) abort
 endfunction
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>aw  <Plug>(coc-codeaction-selected)w
-
-" ===
-" === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
-" ===
-let has_machine_specific_file = 1
-if empty(glob('~/.vim/_machine_specific.vim'))
-  let has_machine_specific_file = 0
-  exec "!cp ~/.vim/default_configs/_machine_specific_default.vim ~/.vim/_machine_specific.vim"
-endif
-source ~/.vim/_machine_specific.vim
 
 " ===
 " === NERDTree
@@ -336,13 +349,7 @@ autocmd WinEnter * silent! unmap <LEADER>ig
 " ===
 " === Taglist
 " ===
-map <silent> T :TagbarOpenAutoClose<CR>
-
-
-" ===
-" === vim-better-whitespace
-" ===
-let g:better_whitespace_enabled=0
+map <silent> tb :TagbarOpenAutoClose<CR>
 
 
 " ===
@@ -383,15 +390,25 @@ map L :UndotreeToggle<CR>
 " == vim-multiple-cursor
 " ==
 let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_word_key      = '<c-k>'
-let g:multi_cursor_select_all_word_key = '<a-k>'
-let g:multi_cursor_start_key           = 'g<c-k>'
-let g:multi_cursor_select_all_key      = 'g<a-k>'
-let g:multi_cursor_next_key            = '<c-k>'
-let g:multi_cursor_prev_key            = '<c-p>'
+" Default mapping
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
+" ===
+" === Create a _machine_specific.vim file to adjust machine specific stuff, like python interpreter location
+" ===
+let has_machine_specific_file = 1
+if empty(glob('~/.vim/_machine_specific.vim'))
+  let has_machine_specific_file = 0
+  exec "!cp ~/.vim/default_configs/_machine_specific_default.vim ~/.vim/_machine_specific.vim"
+endif
+source ~/.vim/_machine_specific.vim
 "
 " Open the _machine_specific.vim file if it has just been created
 if has_machine_specific_file == 0
