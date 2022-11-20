@@ -11,3 +11,5 @@ when clone this config directory
 move it to "~/.config/" and make a link in "~/" as ".vim", then it will work
 
 if you want coc work, you nee install nodejs
+
+the coc-plugins will be installed in ~/.config/coc 
