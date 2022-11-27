@@ -50,10 +50,10 @@ syntax on
 " === Editor behavior
 " ===
 " Better tab
-set expandtab
+" set expandtab
 set tabstop=4
 set shiftwidth=4
-set softtabstop=4
+" set softtabstop=4
 " === show the hide char
 set list
 set listchars=tab:\ ,trail:
@@ -127,6 +127,11 @@ set smartcase
 " Set <LEADER> as <SPACE>
 let mapleader=" "
 
+" Basic function map
+noremap w :wq<CR>
+noremap q :q<CR>
+noremap ; :
+
 " J/K keys for 5 times j/k (faster navigation)
 noremap J 5j
 noremap K 5k
@@ -163,12 +168,14 @@ map <right> :vertical res -2<CR>
 " ===
 " Create a new tab with tt
 map tt :tabe<CR>
+map t :tabe<SPACE>
+map Q :tabo<CR>
 " Move around tabs with th and tl
-map th :-tabnext<CR>
-map tl :+tabnext<CR>
+map h :-tabnext<CR>
+map l :+tabnext<CR>
 " Move the tabs with tH and tL
-map tH :-tabmove<CR>
-map tL :+tabmove<CR>
+map H :-tabmove<CR>
+map L :+tabmove<CR>
 
 " ===
 " === Other useful stuff
