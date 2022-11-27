@@ -4,6 +4,7 @@ let s:cpo_save=&cpo
 set cpo&vim
 inoremap <silent> <expr> <Plug>(coc-snippets-expand-jump) coc#_insert_key('request', 'snippets-expand-jump', 1)
 inoremap <silent> <expr> <Plug>(coc-snippets-expand) coc#_insert_key('request', 'snippets-expand', 1)
+inoremap <silent> <Plug>NERDCommenterInsert :call nerdcommenter#Comment('i', "Insert")
 imap <C-G>S <Plug>ISurround
 imap <C-G>s <Plug>Isurround
 imap <C-S> <Plug>Isurround
@@ -27,8 +28,29 @@ map Q :tabo
 map t :tabe 
 noremap q :q
 noremap w :wq
-vnoremap <silent>  cs "ky:ThesaurusQueryReplace k
-nnoremap <silent>  cs :ThesaurusQueryReplaceCurrentWord
+map  <Plug>NERDCommenterToggle
+nmap  ca <Plug>NERDCommenterAltDelims
+xmap  cu <Plug>NERDCommenterUncomment
+nmap  cu <Plug>NERDCommenterUncomment
+xmap  cb <Plug>NERDCommenterAlignBoth
+nmap  cb <Plug>NERDCommenterAlignBoth
+xmap  cl <Plug>NERDCommenterAlignLeft
+nmap  cl <Plug>NERDCommenterAlignLeft
+nmap  cA <Plug>NERDCommenterAppend
+xmap  cy <Plug>NERDCommenterYank
+nmap  cy <Plug>NERDCommenterYank
+xmap  cs <Plug>NERDCommenterSexy
+xmap  ci <Plug>NERDCommenterInvert
+nmap  ci <Plug>NERDCommenterInvert
+nmap  c$ <Plug>NERDCommenterToEOL
+xmap  cn <Plug>NERDCommenterNested
+nmap  cn <Plug>NERDCommenterNested
+xmap  cm <Plug>NERDCommenterMinimal
+nmap  cm <Plug>NERDCommenterMinimal
+xmap  cc <Plug>NERDCommenterComment
+nmap  cc <Plug>NERDCommenterComment
+snoremap <silent>  cs "ky:ThesaurusQueryReplace k
+nmap  cs <Plug>NERDCommenterSexy
 nmap  aw <Plug>(coc-codeaction-selected)w
 nmap  a <Plug>(coc-codeaction-selected)
 xmap  a <Plug>(coc-codeaction-selected)
@@ -239,13 +261,36 @@ vnoremap <silent> <Plug>(coc-translator-pv) :call coc#rpc#notify('doKeymap', [
 nnoremap <silent> <Plug>(coc-translator-p) :call coc#rpc#notify('doKeymap', ['translator-p'])
 vnoremap <silent> <Plug>(coc-snippets-select) :call coc#rpc#notify('doKeymap', ['snippets-select'])
 xnoremap <silent> <Plug>(coc-convert-snippet) :call coc#rpc#notify('doKeymap', ['convert-snippet'])
-nnoremap <SNR>93_: :=v:count ? v:count : ''
+nnoremap <SNR>92_: :=v:count ? v:count : ''
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 tnoremap <silent> <Plug>(fzf-normal) 
 tnoremap <silent> <Plug>(fzf-insert) i
 nnoremap <silent> <Plug>(fzf-normal) <Nop>
 nnoremap <silent> <Plug>(fzf-insert) i
+nnoremap <Plug>NERDCommenterAltDelims :call nerdcommenter#SwitchToAlternativeDelimiters(1)
+xnoremap <silent> <Plug>NERDCommenterUncomment :call nerdcommenter#Comment("x", "Uncomment")
+nnoremap <silent> <Plug>NERDCommenterUncomment :call nerdcommenter#Comment("n", "Uncomment")
+xnoremap <silent> <Plug>NERDCommenterAlignBoth :call nerdcommenter#Comment("x", "AlignBoth")
+nnoremap <silent> <Plug>NERDCommenterAlignBoth :call nerdcommenter#Comment("n", "AlignBoth")
+xnoremap <silent> <Plug>NERDCommenterAlignLeft :call nerdcommenter#Comment("x", "AlignLeft")
+nnoremap <silent> <Plug>NERDCommenterAlignLeft :call nerdcommenter#Comment("n", "AlignLeft")
+nnoremap <silent> <Plug>NERDCommenterAppend :call nerdcommenter#Comment("n", "Append")
+xnoremap <silent> <Plug>NERDCommenterYank :call nerdcommenter#Comment("x", "Yank")
+nnoremap <silent> <Plug>NERDCommenterYank :call nerdcommenter#Comment("n", "Yank")
+xnoremap <silent> <Plug>NERDCommenterSexy :call nerdcommenter#Comment("x", "Sexy")
+nnoremap <silent> <Plug>NERDCommenterSexy :call nerdcommenter#Comment("n", "Sexy")
+xnoremap <silent> <Plug>NERDCommenterInvert :call nerdcommenter#Comment("x", "Invert")
+nnoremap <silent> <Plug>NERDCommenterInvert :call nerdcommenter#Comment("n", "Invert")
+nnoremap <silent> <Plug>NERDCommenterToEOL :call nerdcommenter#Comment("n", "ToEOL")
+xnoremap <silent> <Plug>NERDCommenterNested :call nerdcommenter#Comment("x", "Nested")
+nnoremap <silent> <Plug>NERDCommenterNested :call nerdcommenter#Comment("n", "Nested")
+xnoremap <silent> <Plug>NERDCommenterMinimal :call nerdcommenter#Comment("x", "Minimal")
+nnoremap <silent> <Plug>NERDCommenterMinimal :call nerdcommenter#Comment("n", "Minimal")
+xnoremap <silent> <Plug>NERDCommenterToggle :call nerdcommenter#Comment("x", "Toggle")
+nnoremap <silent> <Plug>NERDCommenterToggle :call nerdcommenter#Comment("n", "Toggle")
+xnoremap <silent> <Plug>NERDCommenterComment :call nerdcommenter#Comment("x", "Comment")
+nnoremap <silent> <Plug>NERDCommenterComment :call nerdcommenter#Comment("n", "Comment")
 nnoremap <silent> <Plug>SurroundRepeat .
 xnoremap <silent> <M-n> :call multiple_cursors#select_all("v", 0)
 nnoremap <silent> <M-n> :call multiple_cursors#select_all("n", 1)
@@ -332,7 +377,7 @@ set laststatus=2
 set listchars=tab:\ ,trail:
 set mouse=a
 set ruler
-set runtimepath=~/.vim,~/.config/vim/plugged/vim-monokai,~/.config/vim/plugged/vim-airline,~/.config/vim/plugged/vim-airline-themes,~/.config/vim/plugged/coc.nvim,~/.config/vim/plugged/undotree,~/.config/vim/plugged/vim-cursorword,~/.config/vim/plugged/conflict-marker.vim,~/.config/vim/plugged/vim-fugitive,~/.config/vim/plugged/vim-signature,~/.config/vim/plugged/vim-wordy,~/.config/vim/plugged/thesaurus_query.vim,~/.config/vim/plugged/auto-pairs,~/.config/vim/plugged/vim-multiple-cursors,~/.config/vim/plugged/vim-surround,~/.config/vim/plugged/tabular,~/.config/vim/plugged/vim-FIGlet,/usr/share/vim/vimfiles,/usr/share/vim/vim90,/usr/share/vim/vimfiles/after,~/.config/vim/plugged/vim-signature/after,~/.config/vim/plugged/tabular/after,~/.vim/after,~/.config/coc/extensions/node_modules/coc-snippets,~/.config/coc/extensions/node_modules/coc-explorer
+set runtimepath=~/.vim,~/.config/vim/plugged/vim-monokai,~/.config/vim/plugged/vim-airline,~/.config/vim/plugged/vim-airline-themes,~/.config/vim/plugged/coc.nvim,~/.config/vim/plugged/undotree,~/.config/vim/plugged/vim-cursorword,~/.config/vim/plugged/conflict-marker.vim,~/.config/vim/plugged/vim-fugitive,~/.config/vim/plugged/vim-signature,~/.config/vim/plugged/vim-wordy,~/.config/vim/plugged/thesaurus_query.vim,~/.config/vim/plugged/auto-pairs,~/.config/vim/plugged/vim-multiple-cursors,~/.config/vim/plugged/vim-surround,~/.config/vim/plugged/tabular,~/.config/vim/plugged/vim-FIGlet,~/.config/vim/plugged/nerdcommenter,/usr/share/vim/vimfiles,/usr/share/vim/vim90,/usr/share/vim/vimfiles/after,~/.config/vim/plugged/vim-signature/after,~/.config/vim/plugged/tabular/after,~/.vim/after,~/.config/coc/extensions/node_modules/coc-snippets,~/.config/coc/extensions/node_modules/coc-explorer
 set scrolloff=5
 set shiftwidth=4
 set shortmess=filnxtToOSc
@@ -351,7 +396,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/.config/vim
+cd ~/.config/vim/sessions
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -360,11 +405,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +0 ~/.config/vim/vimrc
+badd +0 ~/.config/vim/sessions/default.vim
 argglobal
 %argdel
-$argadd vimrc
-edit ~/.config/vim/vimrc
+$argadd default.vim
+edit ~/.config/vim/sessions/default.vim
 argglobal
 let s:cpo_save=&cpo
 set cpo&vim
@@ -558,11 +603,11 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 242 - ((16 * winheight(0) + 11) / 22)
+let s:l = 360 - ((9 * winheight(0) + 11) / 22)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 242
+keepjumps 360
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0

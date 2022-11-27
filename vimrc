@@ -236,6 +236,9 @@ Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
 " Dependencies
 Plug 'fadein/vim-FIGlet'
 
+" commenter
+Plug 'preservim/nerdcommenter'
+
 call plug#end()
 
 " ===
@@ -404,3 +407,28 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
+
+" nerdcommenter
+
+" 默认情况下，在注释分隔符后添加空格
+let g:NERDSpaceDelims = 1
+
+
+" 按行对齐注释分隔符左对齐，而不是按代码缩进
+let g:NERDDefaultAlign = 'left'
+
+
+" 添加您自己的自定义格式或覆盖默认格式（你懂的）
+let g:NERDCustomDelimiters = { 'php': { 'left': '/*','right': '*/' },'html': { 'left': '<!--','right': '-->' },'py': { 'left': '#' },'sh': { 'left': '#' } }
+
+" 允许注释和反转空行（在注释区域时很有用） （没亲测）
+let g:NERDCommentEmptyLines = 1
+
+" 取消注释时启用尾随空白的修剪
+let g:NERDTrimTrailingWhitespace = 1
+
+" 启用nerdcommenttoggle检查是否对所有选定行进行了注释
+let g:NERDToggleCheckAllLines = 1
+
+" 映射批注快捷键按 Ctrl+/
+map  <plug>NERDCommenterToggle
