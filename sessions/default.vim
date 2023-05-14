@@ -8,7 +8,7 @@ inoremap <silent> <Plug>NERDCommenterInsert :call nerdcommenter#Comment('i',
 imap <C-G>S <Plug>ISurround
 imap <C-G>s <Plug>Isurround
 imap <C-S> <Plug>Isurround
-inoremap <silent> <SNR>37_AutoPairsReturn =AutoPairsReturn()
+inoremap <silent> <SNR>35_AutoPairsReturn =AutoPairsReturn()
 inoremap <silent> <expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
 inoremap <silent> <expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
 inoremap <silent> <expr> <C-Y> coc#pum#visible() ? coc#pum#confirm() : "\"
@@ -20,14 +20,19 @@ inoremap <silent> <expr> <C-N> coc#pum#visible() ? coc#pum#next(1) : "\"
 inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\"
 xnoremap <silent>  :call multiple_cursors#new("v", 0)
 nnoremap <silent>  :call multiple_cursors#new("n", 1)
+map <silent> 2 :TagbarOpenAutoClose
+map 1 :NERDTreeToggle
+nnoremap <silent> w :call ShowDocumentation()
 map L :+tabmove
 map H :-tabmove
 map l :+tabnext
 map h :-tabnext
 map Q :tabo
 map t :tabe 
+map n :tabe
 noremap q :q
-noremap w :wq
+vnoremap w :wq
+onoremap w :wq
 map  <Plug>NERDCommenterToggle
 nmap  ca <Plug>NERDCommenterAltDelims
 xmap  cu <Plug>NERDCommenterUncomment
@@ -51,39 +56,31 @@ xmap  cc <Plug>NERDCommenterComment
 nmap  cc <Plug>NERDCommenterComment
 snoremap <silent>  cs "ky:ThesaurusQueryReplace k
 nmap  cs <Plug>NERDCommenterSexy
-nmap  aw <Plug>(coc-codeaction-selected)w
-nmap  a <Plug>(coc-codeaction-selected)
-xmap  a <Plug>(coc-codeaction-selected)
 nmap  f <Plug>(coc-format-selected)
 xmap  f <Plug>(coc-normat-selected)
 nmap  rn <Plug>(coc-rename)
-map  c2 :colorscheme monokai:AirlineTheme molokai
-map  c1 :colorscheme monokai:AirlineTheme zenburn
-map  fd /\(\<\w\+\>\)\_s*\1
 map  l l
 map  k k
 map  j j
 map  h h
 noremap   :nohlsearch
-noremap ; :
 noremap B 3b
 map CH tK
 map CV tH
 noremap E 3e
-noremap J 5j
-noremap K 5k
-map L :UndotreeToggle
+noremap H 4h
+noremap J 4j
+noremap K 4k
+noremap L 4l
 noremap N Nzz
 xmap S <Plug>VSurround
-noremap W 5w
+noremap W 3w
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 vnoremap <silent> \cs "ky:ThesaurusQueryReplace k
 nnoremap <silent> \cs :ThesaurusQueryReplaceCurrentWord
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nmap cS <Plug>CSurround
 nmap cs <Plug>Csurround
-map ch :set splitbelow:split
-map cv :set splitright:vsplit
 nmap ds <Plug>Dsurround
 xmap gx <Plug>NetrwBrowseXVis
 nmap gx <Plug>NetrwBrowseX
@@ -109,11 +106,7 @@ nnoremap <silent> m- :call signature#mark#Purge("all")
 nnoremap <silent> m; :call signature#mark#ToggleAtLine()
 nnoremap <silent> m :call signature#utils#Input()
 noremap n nzz
-map <silent> tb :TagbarOpenAutoClose
-map tf :NERDTreeToggle
-nnoremap <silent> td :call ShowDocumentation()
 map tx :r !figlet
-map tt :tabe
 nmap ySS <Plug>YSsurround
 nmap ySs <Plug>YSsurround
 nmap yss <Plug>Yssurround
@@ -261,7 +254,7 @@ vnoremap <silent> <Plug>(coc-translator-pv) :call coc#rpc#notify('doKeymap', [
 nnoremap <silent> <Plug>(coc-translator-p) :call coc#rpc#notify('doKeymap', ['translator-p'])
 vnoremap <silent> <Plug>(coc-snippets-select) :call coc#rpc#notify('doKeymap', ['snippets-select'])
 xnoremap <silent> <Plug>(coc-convert-snippet) :call coc#rpc#notify('doKeymap', ['convert-snippet'])
-nnoremap <SNR>87_: :=v:count ? v:count : ''
+nnoremap <SNR>88_: :=v:count ? v:count : ''
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 tnoremap <silent> <Plug>(fzf-normal) 
@@ -368,7 +361,7 @@ set completefunc=thesaurus_query#auto_complete_integrate
 set directory=~/.cache/vim/swap//
 set fileencodings=ucs-bom,utf-8,default,latin1
 set formatoptions=q
-set helplang=en
+set helplang=cn
 set hidden
 set hlsearch
 set ignorecase
@@ -377,7 +370,7 @@ set laststatus=2
 set listchars=tab:\ ,trail:
 set mouse=a
 set ruler
-set runtimepath=~/.vim,~/.config/vim/plugged/vim-monokai,~/.config/vim/plugged/vim-airline,~/.config/vim/plugged/vim-airline-themes,~/.config/vim/plugged/coc.nvim,~/.config/vim/plugged/undotree,~/.config/vim/plugged/vim-cursorword,~/.config/vim/plugged/conflict-marker.vim,~/.config/vim/plugged/vim-fugitive,~/.config/vim/plugged/vim-signature,~/.config/vim/plugged/vim-wordy,~/.config/vim/plugged/thesaurus_query.vim,~/.config/vim/plugged/auto-pairs,~/.config/vim/plugged/vim-multiple-cursors,~/.config/vim/plugged/vim-surround,~/.config/vim/plugged/tabular,~/.config/vim/plugged/vim-FIGlet,~/.config/vim/plugged/nerdcommenter,/usr/share/vim/vimfiles,/usr/share/vim/vim90,/usr/share/vim/vimfiles/after,~/.config/vim/plugged/vim-signature/after,~/.config/vim/plugged/tabular/after,~/.vim/after,~/.config/coc/extensions/node_modules/coc-snippets,~/.config/coc/extensions/node_modules/coc-explorer
+set runtimepath=~/.vim,~/.config/vim/plugged/vim-monokai,~/.config/vim/plugged/vim-airline,~/.config/vim/plugged/vim-airline-themes,~/.config/vim/plugged/coc.nvim,~/.config/vim/plugged/conflict-marker.vim,~/.config/vim/plugged/vim-fugitive,~/.config/vim/plugged/vim-signature,~/.config/vim/plugged/vim-wordy,~/.config/vim/plugged/thesaurus_query.vim,~/.config/vim/plugged/auto-pairs,~/.config/vim/plugged/vim-multiple-cursors,~/.config/vim/plugged/vim-surround,~/.config/vim/plugged/vim-FIGlet,~/.config/vim/plugged/nerdcommenter,/usr/share/vim/vimfiles,/usr/share/vim/vim90,/usr/share/vim/vimfiles/after,~/.config/vim/plugged/vim-signature/after,~/.vim/after,~/.config/coc/extensions/node_modules/coc-snippets,~/.config/coc/extensions/node_modules/coc-explorer
 set scrolloff=5
 set shiftwidth=4
 set shortmess=filnxtToOSc
@@ -396,7 +389,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/.config
+cd ~/.config/vim
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -405,11 +398,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +0 ~/.config/.gitignore
+badd +0 ~/.config/vim/vimrc_base
 argglobal
 %argdel
-$argadd .gitignore
-edit ~/.config/.gitignore
+$argadd vimrc_base
+edit ~/.config/vim/vimrc_base
 argglobal
 let s:cpo_save=&cpo
 set cpo&vim
@@ -439,6 +432,18 @@ inoremap <buffer> <silent> ý =AutoPairsMoveCharacter('}')
 inoremap <buffer> <silent> û =AutoPairsMoveCharacter('{')
 inoremap <buffer> <silent> Ý =AutoPairsMoveCharacter(']')
 inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
+vnoremap <buffer> <silent> [" :exe "normal! gv"|call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")
+nnoremap <buffer> <silent> [" :call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")
+vnoremap <buffer> <silent> [] m':exe "normal! gv"|call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "bW")
+nnoremap <buffer> <silent> [] m':call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "bW")
+vnoremap <buffer> <silent> [[ m':exe "normal! gv"|call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "bW")
+nnoremap <buffer> <silent> [[ m':call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "bW")
+vnoremap <buffer> <silent> ]" :exe "normal! gv"|call search('^\(\s*".*\n\)\@<!\(\s*"\)', "W")
+nnoremap <buffer> <silent> ]" :call search('^\(\s*".*\n\)\@<!\(\s*"\)', "W")
+vnoremap <buffer> <silent> ][ m':exe "normal! gv"|call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "W")
+nnoremap <buffer> <silent> ][ m':call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "W")
+vnoremap <buffer> <silent> ]] m':exe "normal! gv"|call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "W")
+nnoremap <buffer> <silent> ]] m':call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "W")
 noremap <buffer> <silent> <M-n> :call AutoPairsJump()
 noremap <buffer> <silent> <M-p> :call AutoPairsToggle()
 inoremap <buffer> <silent>  =AutoPairsDelete()
@@ -473,8 +478,8 @@ setlocal cinoptions=
 setlocal cinscopedecls=public,protected,private
 setlocal cinwords=if,else,while,do,for,switch
 setlocal colorcolumn=
-setlocal comments=:#
-setlocal commentstring=#\ %s
+setlocal comments=sO:#\ -,mO:#\ \ ,eO:##,:#,sO:\"\ -,mO:\"\ \ ,eO:\"\",:\"
+setlocal commentstring=\"%s
 setlocal complete=.,w,b,u,t,i
 setlocal concealcursor=
 setlocal conceallevel=0
@@ -486,14 +491,14 @@ setlocal nocursorcolumn
 set cursorline
 setlocal cursorline
 setlocal cursorlineopt=both
-setlocal define=
+setlocal define=\\v^\\s*export\\s*(def|const|var|final)
 setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal noexpandtab
-if &filetype != 'gitignore'
-setlocal filetype=gitignore
+if &filetype != 'vim'
+setlocal filetype=vim
 endif
 setlocal fillchars=
 setlocal fixendofline
@@ -510,19 +515,19 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldtext=foldtext()
 setlocal formatexpr=
-setlocal formatoptions=q
+setlocal formatoptions=croql
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal formatprg=
 setlocal grepprg=
 setlocal iminsert=0
 setlocal imsearch=-1
-setlocal include=
+setlocal include=\\v^\\s*import\\s*(autoload)?
 setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal indentexpr=vimindent.Expr()
+setlocal indentkeys=0{,0},0),0],!^F,o,O,e,=endif,=enddef,=endfu,=endfor,=endwh,=endtry,=endclass,=endinterface,=endenum,=},=else,=cat,=finall,=END,0\\,0=\"\\\ ,0=#\\\ 
 setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
+setlocal iskeyword=@,48-57,_,192-255,#
+setlocal keywordprg=:help
 setlocal nolinebreak
 setlocal nolisp
 setlocal lispoptions=
@@ -568,8 +573,8 @@ setlocal statusline=%!airline#statusline(1)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'gitignore'
-setlocal syntax=gitignore
+if &syntax != 'vim'
+setlocal syntax=vim
 endif
 setlocal tabstop=4
 setlocal tagcase=
@@ -578,7 +583,7 @@ setlocal tags=
 setlocal termwinkey=
 setlocal termwinscroll=10000
 setlocal termwinsize=
-setlocal textwidth=0
+setlocal textwidth=78
 setlocal thesaurus=
 setlocal thesaurusfunc=
 setlocal noundofile
@@ -591,11 +596,11 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 8 - ((7 * winheight(0) + 11) / 22)
+let s:l = 1 - ((0 * winheight(0) + 11) / 22)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 8
+keepjumps 1
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
