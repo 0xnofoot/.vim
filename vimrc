@@ -28,6 +28,8 @@ set encoding=utf-8
 set clipboard=unnamedplus
 " 防止不正确的背景渲染
 let &t_ut=''
+" 设置按键响应的超时时间，如果没有设置此选项，模式切换时会有明显延迟
+set timeoutlen=1000 ttimeoutlen=0
 
 " ===
 " ===
@@ -407,3 +409,4 @@ let g:NERDToggleCheckAllLines = 1
 map  <plug>NERDCommenterToggle
 " 取消注释行下一行默认注释（未生效）
 set fo-=r
+

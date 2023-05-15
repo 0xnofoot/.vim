@@ -1,0 +1,182 @@
+FUNCTION  <SNR>18_Highlight_Matching_Pair()
+    Defined: /usr/share/vim/vim90/plugin/matchparen.vim:39
+Called 5 times
+Total time:   0.003220698
+ Self time:   0.002805558
+
+count     total (s)      self (s)
+                                    " Remove any previous match.
+    5   0.000661606   0.000246466   call s:Remove_Matches()
+                                  
+                                    " Avoid that we remove the popup menu.
+                                    " Return when there are no colors (looks like the cursor jumps).
+    5                 0.000159467   if pumvisible() || (&t_Co < 8 && !has("gui_running"))
+                                      return
+    5                 0.000027472   endif
+                                  
+                                    " Get the character under the cursor and check if it's in 'matchpairs'.
+    5                 0.000113150   let c_lnum = line('.')
+    5                 0.000086549   let c_col = col('.')
+    5                 0.000049673   let before = 0
+                                  
+    5                 0.000106869   let text = getline(c_lnum)
+    5                 0.000349610   let matches = matchlist(text, '\(.\)\=\%'.c_col.'c\(.\=\)')
+    5                 0.000096660   if empty(matches)
+                                      let [c_before, c] = ['', '']
+    5                 0.000037665   else
+    5                 0.000160698     let [c_before, c] = matches[1:2]
+    5                 0.000037489   endif
+    5                 0.000352365   let plist = split(&matchpairs, '.\zs[:,]')
+    5                 0.000186199   let i = index(plist, c)
+    5                 0.000048812   if i < 0
+                                      " not found, in Insert mode try character before the cursor
+    5                 0.000094952     if c_col > 1 && (mode() == 'i' || mode() == 'R')
+    1                 0.000019977       let before = strlen(c_before)
+    1                 0.000010239       let c = c_before
+    1                 0.000018220       let i = index(plist, c)
+    5                 0.000025221     endif
+    5                 0.000035926     if i < 0
+                                        " not found, nothing to do
+    5                 0.000035255       return
+                                      endif
+                                    endif
+                                  
+                                    " Figure out the arguments for searchpairpos().
+                                    if i % 2 == 0
+                                      let s_flags = 'nW'
+                                      let c2 = plist[i + 1]
+                                    else
+                                      let s_flags = 'nbW'
+                                      let c2 = c
+                                      let c = plist[i - 1]
+                                    endif
+                                    if c == '['
+                                      let c = '\['
+                                      let c2 = '\]'
+                                    endif
+                                  
+                                    " Find the match.  When it was just before the cursor move it there for a
+                                    " moment.
+                                    if before > 0
+                                      let has_getcurpos = exists("*getcurpos")
+                                      if has_getcurpos
+                                        " getcurpos() is more efficient but doesn't exist before 7.4.313.
+                                        let save_cursor = getcurpos()
+                                      else
+                                        let save_cursor = winsaveview()
+                                      endif
+                                      call cursor(c_lnum, c_col - before)
+                                    endif
+                                  
+                                    if !has("syntax") || !exists("g:syntax_on")
+                                      let s_skip = "0"
+                                    else
+                                      " Build an expression that detects whether the current cursor position is
+                                      " in certain syntax types (string, comment, etc.), for use as
+                                      " searchpairpos()'s skip argument.
+                                      " We match "escape" for special items, such as lispEscapeSpecial, and
+                                      " match "symbol" for lispBarSymbol.
+                                      let s_skip = 'synstack(".", col("."))' . '->indexof({_, id -> synIDattr(id, "name") =~? ' . '"string\\|character\\|singlequote\\|escape\\|symbol\\|comment"}) >= 0'
+                                      " If executing the expression determines that the cursor is currently in
+                                      " one of the syntax types, then we want searchpairpos() to find the pair
+                                      " within those syntax types (i.e., not skip).  Otherwise, the cursor is
+                                      " outside of the syntax types and s_skip should keep its value so we skip
+                                      " any matching pair inside the syntax types.
+                                      " Catch if this throws E363: pattern uses more memory than 'maxmempattern'.
+                                      try
+                                        execute 'if ' . s_skip . ' | let s_skip = "0" | endif'
+                                      catch /^Vim\%((\a\+)\)\=:E363/
+                                        " We won't find anything, so skip searching, should keep Vim responsive.
+                                        return
+                                      endtry
+                                    endif
+                                  
+                                    " Limit the search to lines visible in the window.
+                                    let stoplinebottom = line('w$')
+                                    let stoplinetop = line('w0')
+                                    if i % 2 == 0
+                                      let stopline = stoplinebottom
+                                    else
+                                      let stopline = stoplinetop
+                                    endif
+                                  
+                                    " Limit the search time to 300 msec to avoid a hang on very long lines.
+                                    " This fails when a timeout is not supported.
+                                    if mode() == 'i' || mode() == 'R'
+                                      let timeout = exists("b:matchparen_insert_timeout") ? b:matchparen_insert_timeout : g:matchparen_insert_timeout
+                                    else
+                                      let timeout = exists("b:matchparen_timeout") ? b:matchparen_timeout : g:matchparen_timeout
+                                    endif
+                                    try
+                                      let [m_lnum, m_col] = searchpairpos(c, '', c2, s_flags, s_skip, stopline, timeout)
+                                    catch /E118/
+                                      " Can't use the timeout, restrict the stopline a bit more to avoid taking
+                                      " a long time on closed folds and long lines.
+                                      " The "viewable" variables give a range in which we can scroll while
+                                      " keeping the cursor at the same position.
+                                      " adjustedScrolloff accounts for very large numbers of scrolloff.
+                                      let adjustedScrolloff = min([&scrolloff, (line('w$') - line('w0')) / 2])
+                                      let bottom_viewable = min([line('$'), c_lnum + &lines - adjustedScrolloff - 2])
+                                      let top_viewable = max([1, c_lnum-&lines+adjustedScrolloff + 2])
+                                      " one of these stoplines will be adjusted below, but the current values are
+                                      " minimal boundaries within the current window
+                                      if i % 2 == 0
+                                        if has("byte_offset") && has("syntax_items") && &smc > 0
+                                  	let stopbyte = min([line2byte("$"), line2byte(".") + col(".") + &smc * 2])
+                                  	let stopline = min([bottom_viewable, byte2line(stopbyte)])
+                                        else
+                                  	let stopline = min([bottom_viewable, c_lnum + 100])
+                                        endif
+                                        let stoplinebottom = stopline
+                                      else
+                                        if has("byte_offset") && has("syntax_items") && &smc > 0
+                                  	let stopbyte = max([1, line2byte(".") + col(".") - &smc * 2])
+                                  	let stopline = max([top_viewable, byte2line(stopbyte)])
+                                        else
+                                  	let stopline = max([top_viewable, c_lnum - 100])
+                                        endif
+                                        let stoplinetop = stopline
+                                      endif
+                                      let [m_lnum, m_col] = searchpairpos(c, '', c2, s_flags, s_skip, stopline)
+                                    endtry
+                                  
+                                    if before > 0
+                                      if has_getcurpos
+                                        call setpos('.', save_cursor)
+                                      else
+                                        call winrestview(save_cursor)
+                                      endif
+                                    endif
+                                  
+                                    " If a match is found setup match highlighting.
+                                    if m_lnum > 0 && m_lnum >= stoplinetop && m_lnum <= stoplinebottom 
+                                      if exists('*matchaddpos')
+                                        call matchaddpos('MatchParen', [[c_lnum, c_col - before], [m_lnum, m_col]], 10, 3)
+                                      else
+                                        exe '3match MatchParen /\(\%' . c_lnum . 'l\%' . (c_col - before) . 'c\)\|\(\%' . m_lnum . 'l\%' . m_col . 'c\)/'
+                                      endif
+                                      let w:paren_hl_on = 1
+                                    endif
+
+FUNCTION  <SNR>18_Remove_Matches()
+    Defined: /usr/share/vim/vim90/plugin/matchparen.vim:197
+Called 5 times
+Total time:   0.000415140
+ Self time:   0.000415140
+
+count     total (s)      self (s)
+    5                 0.000197807   if exists('w:paren_hl_on') && w:paren_hl_on
+                                      silent! call matchdelete(3)
+                                      let w:paren_hl_on = 0
+    5                 0.000039453   endif
+
+FUNCTIONS SORTED ON TOTAL TIME
+count     total (s)      self (s)  function
+    5   0.003220698   0.002805558  <SNR>18_Highlight_Matching_Pair()
+    5   0.000415140                <SNR>18_Remove_Matches()
+
+FUNCTIONS SORTED ON SELF TIME
+count     total (s)      self (s)  function
+    5   0.003220698   0.002805558  <SNR>18_Highlight_Matching_Pair()
+    5                 0.000415140  <SNR>18_Remove_Matches()
+
