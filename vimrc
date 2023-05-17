@@ -149,7 +149,7 @@ noremap B 3b
 " 查找时，总是将目标显示在中间
 noremap n nzz
 noremap N Nzz
-" LEADER + 空格：取消查找高亮
+" LEADER + 回车：取消查找高亮
 noremap <LEADER><CR> :nohlsearch<CR>
 
 " 改变分屏模式
